@@ -18,8 +18,3 @@ class Scrunt:
     def log(self):
         return self._log
 
-
-if __name__ == '__main__':
-    scrunt = Scrunt(13)
-
-    scrunt.log().info("This is a new info entry")
