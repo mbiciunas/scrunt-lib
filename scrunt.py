@@ -23,5 +23,3 @@ class Scrunt:
 
     def ssh(self):
         return self._ssh
-
-    
