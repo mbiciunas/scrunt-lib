@@ -1,6 +1,7 @@
 from database import DataBase
 from log import Log
 from ssh import SSH
+from aws.aws import AWS
 
 
 class Scrunt:
@@ -18,8 +19,13 @@ class Scrunt:
 
         self._ssh = SSH(self._log, "localhost", "mbiciunas", "M@rk8478")
 
+        self._aws = AWS(self._log, "AKIAJ2WIXGT3XCCLRTBQ", "U9QV6xiXDTnyAtBcc/94VR5pMaB7aGoVhUhi63kL")
+
     def log(self):
         return self._log
 
     def ssh(self):
         return self._ssh
+
+    def aws(self):
+        return self._aws

@@ -1,6 +1,9 @@
+from paramiko.ssh_exception import SSHException, AuthenticationException, BadHostKeyException
+
 from log import Log
 import paramiko
 import select
+import socket
 
 
 class SSH:
@@ -17,9 +20,21 @@ class SSH:
 
     def _connect(self, hostname: str, username: str, password: str):
         self._log.info("Initialize ssh on {}, username: {}".format(hostname, username))
+
         ssh = paramiko.SSHClient()
+
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname=hostname, username=username, password=password)
+
+        try:
+            ssh.connect(hostname=hostname, username=username, password=password, allow_agent=False, look_for_keys=False)
+        except AuthenticationException:
+            self._log.error("Authentication failed, please verify your credentials: {}".format(username))
+        except BadHostKeyException as badHostKeyException:
+            self._log.error("Unable to verify server's host key: {}".format(badHostKeyException))
+        except SSHException as sshException:
+            self._log.error("Unable to establish SSH connection: {}".format(sshException))
+        except socket.error as socketError:
+            self._log.error("Socket error while connecting: {}".format(socketError))
 
         return ssh
 
@@ -39,8 +54,7 @@ class SSH:
         channel.shutdown_write()
 
         # read stdout/stderr in order to prevent read block hangs
-        stdout_chunks = []
-        stdout_chunks.append(stdout.channel.recv(len(stdout.channel.in_buffer)).decode())
+        stdout_chunks = [stdout.channel.recv(len(stdout.channel.in_buffer)).decode()]
         # chunked read to prevent stalls
         while not channel.closed or channel.recv_ready() or channel.recv_stderr_ready():
             self._log.debug("Loop while waiting for channel")
