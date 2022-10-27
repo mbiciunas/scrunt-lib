@@ -1,4 +1,4 @@
-from log import Log
+from ..log import Log
 import boto3
 from .s3 import S3
 
@@ -14,9 +14,9 @@ class AWS:
         self._s3 = S3(self._log, self._session)
 
     def s3(self):
-        self._log.info("Making S3 call")
+        self._log.info("Return S3 client")
         return self._s3
 
     def sts(self):
-        self._log.info("Create and return sts client")
+        self._log.info("Return STS client")
         return self._session.client("sts")

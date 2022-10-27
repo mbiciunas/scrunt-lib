@@ -1,6 +1,6 @@
 from paramiko.ssh_exception import SSHException, AuthenticationException, BadHostKeyException
 
-from log import Log
+from .log import Log
 import paramiko
 import select
 import socket

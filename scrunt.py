@@ -1,7 +1,7 @@
-from database import DataBase
-from log import Log
-from ssh import SSH
-from aws.aws import AWS
+from .database import DataBase
+from .log import Log
+from .ssh import SSH
+from .aws.aws import AWS
 
 
 class Scrunt:
